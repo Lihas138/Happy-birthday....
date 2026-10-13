@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dear SAMJANA 💗</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Georgia, serif;
+  color: #9d416b;
+  text-align: center;
+  background: linear-gradient(135deg, #fff8fc, #ffe0ef, #fff);
+  overflow-x: hidden;
+}
+
+.screen {
+  display: none;
+  min-height: 100vh;
+  padding: 35px 18px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.screen.active {
+  display: flex;
+  animation: appear 0.8s ease;
+}
+
+h1 {
+  font-size: clamp(30px, 8vw, 48px);
+}
+
+h2 {
+  font-size: 27px;
+}
+
+p {
+  font-size: 18px;
+  line-height: 1.7;
+}
+
+button {
+  background: linear-gradient(135deg, #ff8fbd, #f05b9a);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  padding: 14px 23px;
+  font-size: 16px;
+  margin: 9px;
+  cursor: pointer;
+  box-shadow: 0 5px 18px #f6a7cb77;
+}
+
+button:active {
+  transform: scale(.96);
+}
+
+.card {
+  background: #ffffffd9;
+  border: 1px solid #ffd0e4;
+  border-radius: 25px;
+  padding: 25px 19px;
+  width: min(100%, 430px);
+  box-shadow: 0 10px 35px #d95b901c;
+}
+
+.heart {
+  position: fixed;
+  bottom: -30px;
+  pointer-events: none;
+  animation: floatUp 7s linear forwards;
+  z-index: 5;
+}
+
+@keyframes floatUp {
+  to {
+    transform: translateY(-115vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+@keyframes appear {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+input[type="file"] {
+  width: 100%;
+  margin: 12px 0;
+  font-size: 14px;
+}
+
+input[type="text"], textarea {
+  width: 100%;
+  padding: 13px;
+  border: 1px solid #f4a5c9;
+  border-radius: 12px;
+  margin: 10px 0;
+  font: inherit;
+  color: #87395e;
+}
+
+textarea {
+  min-height: 180px;
+  resize: vertical;
+}
+
+.photo {
+  width: 100%;
+  max-height: 330px;
+  object-fit: contain;
+  border-radius: 18px;
+  margin-top: 12px;
+}
+
+#envelope {
+  font-size: 100px;
+  cursor: pointer;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  50% { transform: scale(1.08); }
+}
+
+.small {
+  font-size: 13px;
+  color: #aa6885;
+}
+
+#musicStatus {
+  font-size: 13px;
+}
+
+footer {
+  margin-top: 25px;
+  font-size: 13px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- WELCOME -->
+<section class="screen active" id="s0">
+  <div class="card">
+    <div style="font-size:55px">🎀💗🎀</div>
+    <p>A LITTLE SURPRISE FOR SOMEONE SPECIAL</p>
+    <h1>Dear SAMJANA 💕</h1>
+    <p>Someone who loves you has prepared something special...</p>
+    <p>Are you ready, Baby? 🥹❤️</p>
+    <button onclick="start()">CLICK TO START 💖</button>
+    <p class="small">Made with love by Sahil 💌</p>
+  </div>
+</section>
+
+<!-- ADD MUSIC -->
+<section class="screen" id="s1">
+  <div class="card">
+    <h1>🎵 Our Song</h1>
+    <p>Baby, choose the song you want me to play for you. 💗</p>
+    <input type="file" id="songFile" accept="audio/*">
+    <button onclick="playSong()">PLAY OUR SONG 🎶</button>
+    <button onclick="next(2)">LET'S CONTINUE 💕</button>
+    <p id="musicStatus">Choose a song from your phone.</p>
+    <audio id="music" loop controls></audio>
+  </div>
+</section>
+
+<!-- QUESTIONS -->
+<section class="screen" id="s2">
+  <div class="card">
+    <h1>Hey Baby 🥹💗</h1>
+    <p>Before your surprises, answer these cute questions!</p>
+    <h2 id="question">Question 1 💕</h2>
+    <div id="answers"></div>
+    <p id="reply"></p>
+    <button id="nextQuestion" onclick="questionNext()" style="display:none">
+      NEXT QUESTION 💖
+    </button>
+  </div>
+</section>
+
+<!-- MEMORIES -->
+<section class="screen" id="s3">
+  <div class="card">
+    <h1>Our Little Memories 📸</h1>
+    <p>Choose your favorite photos together from your phone, Baby. ❤️</p>
+    <input type="file" id="photos" accept="image/*" multiple>
+    <div id="gallery"></div>
+    <button onclick="next(4)">UNLOCK THE NEXT SURPRISE 🎁</button>
+  </div>
+</section>
+
+<!-- GIFT -->
+<section class="screen" id="s4">
+  <div class="card">
+    <h1>Your Little Gift 🎁</h1>
+    <p>Baby, tap the gift to open your surprise! 💗</p>
+    <div id="gift" style="font-size:100px;cursor:pointer"
+         onclick="openGift()">🎁</div>
+    <p id="giftMessage"></p>
+    <button id="giftNext" style="display:none" onclick="next(5)">
+      NEXT SURPRISE 🎂
+    </button>
+  </div>
+</section>
+
+<!-- CAKE -->
+<section class="screen" id="s5">
+  <div class="card">
+    <h1>Happy Birthday, Baby! 🎂</h1>
+    <p>Make a wish, my love. ✨</p>
+    <div id="cake" style="font-size:100px;cursor:pointer"
+         onclick="blowCandles()">🕯️🎂🕯️</div>
+    <p id="cakeMessage">Tap the cake to blow out your candles! 💕</p>
+    <button onclick="next(6)">ONE LAST SURPRISE 💌</button>
+  </div>
+</section>
+
+<!-- FINAL LETTER -->
+<section class="screen" id="s6">
+  <div class="card">
+    <h1>One Last Surprise 💌</h1>
+    <p>Baby, this is something from my heart, just for you. ❤️</p>
+    <div id="envelope" onclick="openLetter()">💌</div>
+    <p>Tap the envelope to open your letter.</p>
+
+    <div id="letterArea" style="display:none">
+      <h2>My Dearest SAMJANA 💗</h2>
+      <p class="small">Write your personal letter below, Sahil.</p>
+      <textarea id="letterText"
+        placeholder="My dearest Baby...&#10;&#10;Write everything you want her to know here. ❤️"></textarea>
+      <input id="signature" type="text" value="Forever yours, Sahil ❤️"
+        placeholder="Your signature">
+      <button onclick="showLetter()">READ MY LETTER 💖</button>
+      <div id="letterResult" style="display:none"></div>
+    </div>
+
+    <p>Made with endless love by Sahil 💗</p>
+  </div>
+</section>
+
+<script>
+let currentQuestion = 0;
+let chosenAnswer = false;
+let photoURLs = [];
+let songURL = "";
+
+const questions = [
+  {
+    q: "Who loves you the most? ❤️",
+    a: ["Sahil 🥹", "My teddy bear 🧸", "Nobody 😜"],
+    r: [
+      "Correct, Baby! Your Sahil loves you endlessly! 💗",
+      "Awww! But Sahil is jealous of the teddy bear! 😂",
+      "Wrong answer! Sahil loves you so much! ❤️"
+    ]
+  },
+  {
+    q: "What would you choose for our date? 💕",
+    a: ["A long hug 🤗", "A romantic walk 🌹", "All of them 💗"],
+    r: [
+      "Imagine Sahil hugging you right now! 🥹",
+      "A romantic walk with my favorite person! 🌸",
+      "The perfect answer, Baby! Every moment with you! 💖"
+    ]
+  },
+  {
+    q: "How much do you love your Baby? 🥹",
+    a: ["A little 💕", "To the moon and back 🌙", "Infinity ♾️"],
+    r: [
+      "Only a little? Sahil wants extra hugs! 😂",
+      "To the moon and back, and back again! ❤️",
+      "Infinity love unlocked! ♾️💗"
+    ]
+  }
+];
+
+function start() {
+  next(1);
+  makeHearts();
+}
+
+function next(n) {
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.getElementById("s" + n).classList.add("active");
+}
+
+function makeHearts() {
+  setInterval(() => {
+    const h = document.createElement("div");
+    h.className = "heart";
+    h.textContent = ["💗", "💕", "💖", "✨", "🌸"][Math.floor(Math.random()*5)];
+    h.style.left = Math.random()*100 + "vw";
+    h.style.fontSize = (16 + Math.random()*22) + "px";
+    document.body.appendChild(h);
+    setTimeout(() => h.remove(), 7000);
+  }, 500);
+}
+
+function playSong() {
+  const file = document.getElementById("songFile").files[0];
+  const audio = document.getElementById("music");
+
+  if (file) {
+    if (songURL) URL.revokeObjectURL(songURL);
+    songURL = URL.createObjectURL(file);
+    audio.src = songURL;
+  }
+
+  if (!audio.src) {
+    document.getElementById("musicStatus").textContent =
+      "First choose a song from your phone. 🎵";
+    return;
+  }
+
+  audio.play().then(() => {
+    document.getElementById("musicStatus").textContent =
+      "Our song is playing, Baby! 💗";
+  }).catch(() => {
+    document.getElementById("musicStatus").textContent =
+      "Tap Play on the music player to start your song.";
+  });
+}
+
+document.getElementById("photos").addEventListener("change", function() {
+  const gallery = document.getElementById("gallery");
+  gallery.innerHTML = "";
+
+  photoURLs.forEach(url => URL.revokeObjectURL(url));
+  photoURLs = [];
+
+  Array.from(this.files).forEach(file => {
+    const url = URL.createObjectURL(file);
+    photoURLs.push(url);
+    const img = document.createElement("img");
+    img.src = url;
+    img.className = "photo";
+    img.alt = "A special memory";
+    gallery.appendChild(img);
+  });
+});
+
+function renderQuestion() {
+  chosenAnswer = false;
+  document.getElementById("reply").textContent = "";
+  document.getElementById("nextQuestion").style.display = "none";
+
+  const item = questions[currentQuestion];
+  document.getElementById("question").textContent = item.q;
+
+  const answers = document.getElementById("answers");
+  answers.innerHTML = "";
+
+  item.a.forEach((answer, i) => {
+    const button = document.createElement("button");
+    button.textContent = answer;
+    button.onclick = () => {
+      if (chosenAnswer) return;
+      chosenAnswer = true;
+      document.getElementById("reply").textContent = item.r[i];
+      document.getElementById("nextQuestion").style.display = "inline-block";
+      makeHeartsBurst();
+    };
+    answers.appendChild(button);
+  });
+}
+
+function questionNext() {
+  currentQuestion++;
+  if (currentQuestion < questions.length) {
+    renderQuestion();
+  } else {
+    next(3);
+  }
+}
+
+function makeHeartsBurst() {
+  for (let i = 0; i < 12; i++) {
+    const h = document.createElement("div");
+    h.textContent = "💗";
+    h.style.position = "fixed";
+    h.style.left = (20 + Math.random()*60) + "vw";
+    h.style.top = (30 + Math.random()*40) + "vh";
+    h.style.fontSize = "25px";
+    h.style.pointerEvents = "none";
+    h.style.zIndex = "10";
+    h.style.transition = "all 1.2s ease";
+    document.body.appendChild(h);
+
+    requestAnimationFrame(() => {
+      h.style.transform = `translate(${Math.random()*180-90}px, -150px)`;
+      h.style.opacity = "0";
+    });
+
+    setTimeout(() => h.remove(), 1300);
+  }
+}
+
+function openGift() {
+  document.getElementById("gift").textContent = "💝";
+  document.getElementById("giftMessage").textContent =
+    "Surprise, Baby! You are my favorite gift in this whole world! ❤️";
+  document.getElementById("giftNext").style.display = "inline-block";
+  makeHeartsBurst();
+}
+
+function blowCandles() {
+  document.getElementById("cake").textContent = "🎂✨💗";
+  document.getElementById("cakeMessage").textContent =
+    "Wish made! May your life be as beautiful as your smile, Baby! 💖";
+  makeHeartsBurst();
+}
+
+function openLetter() {
+  document.getElementById("letterArea").style.display = "block";
+  document.getElementById("envelope").textContent = "💌";
+}
+
+function showLetter() {
+  const letter = document.getElementById("letterText").value.trim();
+  const signature = document.getElementById("signature").value.trim();
+  const result = document.getElementById("letterResult");
+
+  if (!letter) {
+    alert("Write your love letter first, Sahil! 💗");
+    return;
+  }
+
+  result.style.display = "block";
+  result.style.whiteSpace = "pre-wrap";
+  result.style.textAlign = "left";
+  result.style.background = "#fff5fa";
+  result.style.borderRadius = "15px";
+  result.style.padding = "20px";
+  result.innerHTML = "";
+
+  const heading = document.createElement("h2");
+  heading.textContent = "Dear SAMJANA 💗";
+
+  const message = document.createElement("p");
+  message.style.whiteSpace = "pre-wrap";
+  message.textContent = letter;
+
+  const sign = document.createElement("p");
+  sign.style.textAlign = "right";
+  sign.textContent = signature;
+
+  result.append(heading, message, sign);
+  makeHeartsBurst();
+}
+
+renderQuestion();
+</script>
+
+</body>
+</html>
